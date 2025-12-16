@@ -1,0 +1,162 @@
+---
+title: "Data Visualisation"
+author: "Takudzwa Joshua Charles"
+date: '2022-11-19'
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## QUESTION TWO
+```{r}
+library(readxl)
+Sales <- read_excel("C:/Users/bonny/Desktop/Data Visualisation/Sales.xlsx")
+```
+View(Sales)
+replace n/a with NA
+```{r}
+Sales[Sales[,] == "n/a"] <- 'NA'
+```
+drop those values we cannot calculate from other given variables
+```{r}
+library(tidyr)
+summary_Sales <- Sales %>% drop_na()
+summary_Sales
+Sales$`Total Revenue`<- as.character(as.numeric(Sales$`Unit Price`)*as.numeric(Sales$`Units Sold`))
+Sales$`Total Cost`<- as.character(as.numeric(Sales$`Unit Cost`)*as.numeric(Sales$`Units Sold`))
+Sales$`Total Profit`<- as.character(as.numeric(Sales$`Total Revenue`)*as.numeric(Sales$`Total Cost`))
+```
+
+1b)
+from raw data
+```{r}
+hist(as.numeric(Sales[1:20,]$`Total Revenue`),main = "Raw data Total Revenue",xlab="Total Revenue",col = "blue")
+```
+from cleaned data
+```{r}
+hist(as.numeric(summary_Sales[1:20,]$`Total Revenue`),main = "Cleaned data Total Revenue",col = "pink")
+```
+
+plots
+plot for raw data
+```{r}
+plot(Sales[1:30,]$`Total Revenue`,Sales[1:30,]$`Total Profit`,xlab = "Total Revenue",
+     ylab = "Total Profit",col="red",main = "Total Revenue vs Total profit Raw Data")
+```
+plots for cleaned
+```{r}
+plot(summary_Sales[1:30,]$`Total Revenue`,summary_Sales[1:30,]$`Total Profit`,xlab = "Total Revenue",
+     ylab = "Total Profit",col="green",main = "Total Revenue vs Total profit Raw Data")
+```
+2c)
+```{r}
+library(ggplot2)
+ggplot(summary_Sales[1:13,])+geom_point(aes(y =`Total Cost`, x = `Units Sold`), col = 'gold', size = 3) + ggtitle(" Unit Sold vs Total Cost") + theme(plot.title = element_text(hjust = 0.5))
+ggplot(summary_Sales[1:10,])+geom_point(aes(y =`Unit Price`, x = `Unit Cost`), col = 'gold', size = 3) + ggtitle(" Unit Price vs Unit Cost") + theme(plot.title = element_text(hjust = 0.5))
+ggplot(summary_Sales[1:10,])+geom_point(aes(y =`Total Cost`, x = `Total Revenue`), col = 'gold', size = 3) + ggtitle(" Total Cost vs Total Revenue") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+2d)
+```{r}
+library(tidyr)
+library(dplyr)
+summary_Sales <- summary_Sales %>% arrange(desc(as.numeric(summary_Sales$`Total Cost`)))
+summary_Sales$`Total Cost`
+```
+
+2e)
+
+TYPES OF EXPLORATORY DATA ANALYSIS:
+  
+Univariate Non-graphical
+Multivariate Non-graphical
+Univariate graphical
+Multivariate graphical
+2f)
+```{r,warning=FALSE}
+summary_Sales$Country[1] <- "Angola"
+summary_Sales$`Item Type`[1] <- "Chicken Slice"
+summary_Sales$`Units Sold`[1] <- "233"
+```
+2g)
+```{r,warning=FALSE}
+#summary_Sales[summary_Sales[,"Paid"] == "No"] <- "Yes"
+summary_Sales$Paid[summary_Sales$Paid == 'No'] <- 'Yes'
+```
+
+2h)
+```{r,warning=FALSE}
+mean(as.numeric(summary_Sales$`Unit Cost`),na.rm = T)
+mean(as.numeric(summary_Sales$`Unit Price`),na.rm = T)
+mean(as.numeric(summary_Sales$`Total Cost`),na.rm = T)
+mean(as.numeric(summary_Sales$`Total Profit`),na.rm = T)
+mean(as.numeric(summary_Sales$`Total Revenue`),na.rm = T)
+```
+
+```{r}
+x <- quantile(as.numeric(summary_Sales$`Unit Cost`,na.rm = F),0.25,na.rm = T)
+
+```
+
+```{r,warning=FALSE}
+x
+y <- quantile(as.numeric(summary_Sales$`Unit Cost`),0.75,na.rm = T)
+y
+inter_quantile <- y-x
+inter_quantile
+
+x <- quantile(as.numeric(summary_Sales$`Unit Price`),0.25,na.rm = T)
+
+x
+y <- quantile(as.numeric(summary_Sales$`Unit Price`),0.75,na.rm = T)
+y
+inter_quantile <- y-x
+inter_quantile
+#quantile
+x <- quantile(as.numeric(summary_Sales$`Total Cost`),0.25,na.rm = T)
+x
+y <- quantile(as.numeric(summary_Sales$`Total Cost`),0.75,na.rm = T)
+y
+inter_quantile <- y-x
+inter_quantile
+#quantile
+x <- quantile(as.numeric(summary_Sales$`Total Revenue`),0.25,na.rm = T)
+x
+y <- quantile(as.numeric(summary_Sales$`Total Revenue`),0.75,na.rm = T)
+y
+inter_quantile <- y-x
+inter_quantile
+#quantile
+x <- quantile(as.numeric(summary_Sales$`Total Profit`),0.25,na.rm = T)
+x
+y <- quantile(as.numeric(summary_Sales$`Total Profit`),0.75,na.rm = T)
+y
+inter_quantile <- y-x
+inter_quantile
+#quantile
+x <- quantile(as.numeric(summary_Sales$`Units Sold`),0.25,na.rm = T)
+x
+y <- quantile(as.numeric(summary_Sales$`Unit Sold`),0.75,na.rm = T)
+y
+inter_quantile <- y-x
+inter_quantile
+```
+2i)
+dataset before
+```{r}
+summary_Sales[1,]
+summary_Sales[1,2] <- "Paid_Type"
+```
+after
+```{r,warning=FALSE}
+summary_Sales[1,]
+```   
+
+
+
+

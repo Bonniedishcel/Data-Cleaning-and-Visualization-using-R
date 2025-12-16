@@ -1,0 +1,98 @@
+---
+title: "Titanic_question"
+author: "Takudzwa Joshua Charles"
+date: '2022-11-19'
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r,warning=FALSE}
+library(readxl)
+library(tidyverse)
+library(extrafont)
+library(extrafontdb)
+titanic_data <- read_excel("C:/Users/bonny/Desktop/Data Visualisation/Titanic.xlsx")
+#View(Titanic)
+train <- titanic_data
+summry <- summary(Titanic)
+```
+```{r,warning=FALSE}
+# 1a)
+table(titanic_data$Survived)
+
+
+# Graph
+titanic_data %>% 
+  ggplot(aes(x = Survived)) +
+  geom_bar(width = 0.4) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(family = "Times New Roman", hjust = 0.5),
+    axis.text = element_text(family = "Times New Roman",face = "bold"),
+    axis.title = element_text(family = "Times New Roman", face = "bold")
+  ) +
+  labs(title = "Overall Survival Rates", x = NULL, y = "Passenger count")
+```
+```{r}
+#1b)
+Ccounts <- table(train$Survived, train$PClass)
+#confusion Matrix
+Ccounts
+counts <- table(train$Survived, train$Sex)
+#confusion Matrix
+counts
+# survival for male and female
+female <- nrow(train[train$Sex=='female',])
+male <- nrow(train[train$Sex=='male',])
+slice <- c(female, male)
+divi <- c("Female", "Male")
+
+survival_percent <- c(counts[2]/(counts[1]+counts[2]), counts[4]/(counts[3]+counts[4]))
+# Survival Percent for Female,   Male
+survival_percent
+
+```
+```{r,warning=FALSE}
+#1c) survival by class of ticket
+Ccounts <- table(train$Survived, train$PClass)
+#confusion Matrix
+Ccounts
+Class_survival_percent <- c(Ccounts[2]/(Ccounts[1]+Ccounts[2]), Ccounts[4]/(Ccounts[3]+Ccounts[4]), Ccounts[6]/(Ccounts[5]+Ccounts[6]))
+Class_survival_percent
+
+```
+```{r,warning=FALSE}
+
+#1d)Pclass and gender
+Ccounts <- table(train$Survived, train$PClass,train$Sex)
+Ccounts
+Class_gendersurvival_percent <- c(Ccounts[2]/(Ccounts[1]+Ccounts[2]),
+                            Ccounts[4]/(Ccounts[3]+Ccounts[4]),
+                            Ccounts[6]/(Ccounts[5]+Ccounts[6]),
+                            Ccounts[8]/(Ccounts[7]+Ccounts[8]),
+                            Ccounts[10]/(Ccounts[9]+Ccounts[10]),
+                            Ccounts[12]/(Ccounts[11]+Ccounts[12])
+                            
+                            )
+Class_gendersurvival_percent
+```
+```{r,warning=FALSE}
+#1e)
+hist(titanic_data$Age)
+#the age histogram graph is relatively normally distributed and skewed to the right.
+```
+
+```{r,warning=FALSE}
+
+#1f
+Ccounts <- table(train$Survived,train$Age)
+Ccounts
+# code to be done 
+# Class 1 is Classy and others NonClassy
+CustomerType <- factor(train$PClass,
+                       levels = c("1st","2nd","3rd"),
+                       labels = c("Classy","Non Classy","Non Classy"))
+CustomerType
+
+```
